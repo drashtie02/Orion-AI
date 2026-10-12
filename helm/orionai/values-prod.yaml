@@ -1,0 +1,147 @@
+replicaCount: 5
+
+image:
+  repository: orionai
+  pullPolicy: IfNotPresent
+  tag: "1.0.0"
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8011"
+  prometheus.io/path: "/metrics"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 1000
+  capabilities:
+    drop:
+    - ALL
+
+service:
+  type: ClusterIP
+  port: 8011
+  targetPort: 8011
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rate-limit: "200"
+    nginx.ingress.kubernetes.io/limit-rps: "20"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: orionai.yourdomain.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: orionai-tls
+      hosts:
+        - orionai.yourdomain.com
+
+resources:
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+
+autoscaling:
+  enabled: true
+  minReplicas: 5
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 3
+
+redis:
+  enabled: true
+  image:
+    repository: redis
+    tag: 7-alpine
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+  persistence:
+    enabled: true
+    storageClass: fast-ssd
+    size: 20Gi
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 999
+    fsGroup: 999
+
+config:
+  embeddingModel: "nomic-embed-text"
+  embeddingApiUrl: "http://localhost:11434/api/embeddings"
+  embeddingType: "api"
+  llmModel: "llama2"
+  llmApiUrl: "http://localhost:11434/api/generate"
+  llmType: "api"
+  retrievalAlpha: 0.5
+  topKDefault: 5
+  maxContextTokens: 2048
+  device: "auto"
+  chunkSize: 512
+  chunkOverlap: 0.2
+  indexPath: "artifacts/index"
+  useMixedPrecision: true
+  cpuBatchSize: 8
+  gpuBatchSize: 32
+  criticThreshold: 0.6
+  monthlyBudgetLimit: 100.0
+
+env:
+  logLevel: INFO
+  environment: production
+
+secrets:
+  openaiApiKey: ""
+  apiKey: "changeme-production-key"
+
+networkPolicy:
+  enabled: true
+
+resourceQuota:
+  enabled: true
+  hard:
+    requestsCpu: "40"
+    requestsMemory: 80Gi
+    limitsCpu: "80"
+    limitsMemory: 160Gi
+    persistentvolumeclaims: "20"
+    pods: "100"
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - orionai
+        topologyKey: kubernetes.io/hostname

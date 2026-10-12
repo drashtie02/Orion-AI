@@ -1,0 +1,82 @@
+[
+  {
+    "query": "What is artificial intelligence?",
+    "ground_truth": "Artificial intelligence is the simulation of human intelligence processes by machines, especially computer systems."
+  },
+  {
+    "query": "What are the main types of machine learning?",
+    "ground_truth": "The main types of machine learning are supervised learning, unsupervised learning, and reinforcement learning."
+  },
+  {
+    "query": "What is cloud computing?",
+    "ground_truth": "Cloud computing is the delivery of computing services over the internet, including storage, processing, and software."
+  },
+  {
+    "query": "What are the benefits of cloud computing?",
+    "ground_truth": "Benefits include scalability, cost efficiency, flexibility, automatic updates, and accessibility from anywhere."
+  },
+  {
+    "query": "What is a neural network?",
+    "ground_truth": "A neural network is a computing system inspired by biological neural networks that learns to perform tasks by considering examples."
+  },
+  {
+    "query": "What is deep learning?",
+    "ground_truth": "Deep learning is a subset of machine learning that uses neural networks with multiple layers to learn from data."
+  },
+  {
+    "query": "What is natural language processing?",
+    "ground_truth": "Natural language processing is a branch of AI that helps computers understand, interpret, and manipulate human language."
+  },
+  {
+    "query": "What is supervised learning?",
+    "ground_truth": "Supervised learning is a machine learning approach where models are trained on labeled data with known outputs."
+  },
+  {
+    "query": "What is unsupervised learning?",
+    "ground_truth": "Unsupervised learning is a machine learning approach where models find patterns in unlabeled data without predefined outputs."
+  },
+  {
+    "query": "What is reinforcement learning?",
+    "ground_truth": "Reinforcement learning is a machine learning approach where agents learn by interacting with an environment and receiving rewards."
+  },
+  {
+    "query": "What is a virtual machine?",
+    "ground_truth": "A virtual machine is a software emulation of a physical computer that runs an operating system and applications."
+  },
+  {
+    "query": "What is containerization?",
+    "ground_truth": "Containerization is a lightweight virtualization method that packages applications with their dependencies for consistent deployment."
+  },
+  {
+    "query": "What is serverless computing?",
+    "ground_truth": "Serverless computing is a cloud model where the provider manages infrastructure and automatically scales resources as needed."
+  },
+  {
+    "query": "What is data preprocessing?",
+    "ground_truth": "Data preprocessing is the process of cleaning, transforming, and organizing raw data before analysis or model training."
+  },
+  {
+    "query": "What is overfitting in machine learning?",
+    "ground_truth": "Overfitting occurs when a model learns training data too well, including noise, resulting in poor generalization to new data."
+  },
+  {
+    "query": "What is a training dataset?",
+    "ground_truth": "A training dataset is a collection of data used to train machine learning models to learn patterns and make predictions."
+  },
+  {
+    "query": "What is model evaluation?",
+    "ground_truth": "Model evaluation is the process of assessing a machine learning model's performance using metrics on test data."
+  },
+  {
+    "query": "What is feature engineering?",
+    "ground_truth": "Feature engineering is the process of selecting, creating, and transforming variables to improve model performance."
+  },
+  {
+    "query": "What is cross-validation?",
+    "ground_truth": "Cross-validation is a technique for assessing model performance by training and testing on different data subsets."
+  },
+  {
+    "query": "What is transfer learning?",
+    "ground_truth": "Transfer learning is a technique where a model trained on one task is adapted for use on a different but related task."
+  }
+]

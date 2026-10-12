@@ -1,0 +1,82 @@
+graph TB
+    subgraph "Client Layer"
+        Client[Client Application]
+    end
+
+    subgraph "API Layer"
+        Ingress[Ingress/Load Balancer]
+        FastAPI[FastAPI Service]
+        Middleware[Middleware Stack]
+        RateLimit[Rate Limiter]
+        ReqID[Request ID Generator]
+        Logger[Request Logger]
+        Router[API Router]
+    end
+
+    subgraph "Core Layer"
+        Orchestrator[Orchestrator]
+        Config[Configuration Manager]
+        DeviceManager[Device Manager]
+    end
+
+    subgraph "Retrieval Layer"
+        HybridRetriever[Hybrid Retriever]
+        VectorSearch[Vector Search<br/>FAISS]
+        BM25[BM25 Search]
+        Embeddings[Sentence Transformers]
+    end
+
+    subgraph "LLM Layer"
+        ModelRouter[Model Router]
+        LLMClient[LLM Client<br/>Ollama/OpenAI]
+        StreamHandler[Stream Handler]
+    end
+
+    subgraph "Resilience Layer"
+        RetryLogic[Retry with<br/>Exponential Backoff]
+        CircuitBreaker[Circuit Breaker]
+        Timeout[Timeout Handler]
+    end
+
+    subgraph "Infrastructure Layer"
+        Redis[(Redis Cache)]
+        Metrics[Metrics Collector]
+        Observability[Observability<br/>Token Tracking]
+    end
+
+    Client --> Ingress
+    Ingress --> FastAPI
+    FastAPI --> Middleware
+    Middleware --> RateLimit
+    RateLimit --> ReqID
+    ReqID --> Logger
+    Logger --> Router
+    Router --> Orchestrator
+    
+    Orchestrator --> Config
+    Orchestrator --> HybridRetriever
+    Orchestrator --> ModelRouter
+    
+    HybridRetriever --> VectorSearch
+    HybridRetriever --> BM25
+    VectorSearch --> Embeddings
+    
+    ModelRouter --> RetryLogic
+    RetryLogic --> CircuitBreaker
+    CircuitBreaker --> LLMClient
+    LLMClient --> StreamHandler
+    
+    Orchestrator --> Redis
+    Redis -.Cache Hit.-> Orchestrator
+    
+    StreamHandler --> Observability
+    Observability --> Metrics
+    
+    StreamHandler -.SSE.-> Client
+
+    style Client fill:#e1f5ff
+    style FastAPI fill:#fff4e1
+    style HybridRetriever fill:#e8f5e9
+    style Redis fill:#fce4ec
+    style CircuitBreaker fill:#fff3e0
+    style StreamHandler fill:#f3e5f5

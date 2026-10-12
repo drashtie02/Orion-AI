@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "orionai.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "orionai.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    embedding_model: {{ .Values.config.embeddingModel | quote }}
+    embedding_api_url: {{ .Values.config.embeddingApiUrl | quote }}
+    embedding_type: {{ .Values.config.embeddingType | quote }}
+    llm_model: {{ .Values.config.llmModel | quote }}
+    llm_api_url: {{ .Values.config.llmApiUrl | quote }}
+    llm_type: {{ .Values.config.llmType | quote }}
+    retrieval_alpha: {{ .Values.config.retrievalAlpha }}
+    top_k_default: {{ .Values.config.topKDefault }}
+    max_context_tokens: {{ .Values.config.maxContextTokens }}
+    device: {{ .Values.config.device | quote }}
+    chunk_size: {{ .Values.config.chunkSize }}
+    chunk_overlap: {{ .Values.config.chunkOverlap }}
+    index_path: {{ .Values.config.indexPath | quote }}
+    use_mixed_precision: {{ .Values.config.useMixedPrecision }}
+    cpu_batch_size: {{ .Values.config.cpuBatchSize }}
+    gpu_batch_size: {{ .Values.config.gpuBatchSize }}
+    evaluation_weights:
+      faithfulness: {{ .Values.config.evaluationWeights.faithfulness }}
+      relevance: {{ .Values.config.evaluationWeights.relevance }}
+      hallucination: {{ .Values.config.evaluationWeights.hallucination }}
+      source_coverage: {{ .Values.config.evaluationWeights.sourceCoverage }}
+    critic_threshold: {{ .Values.config.criticThreshold }}
+    models:
+      cheap_model:
+        type: {{ .Values.config.models.cheapModel.type }}
+        model_name: {{ .Values.config.models.cheapModel.modelName }}
+        api_url: {{ .Values.config.models.cheapModel.apiUrl }}
+        cost_per_1k_input: {{ .Values.config.models.cheapModel.costPer1kInput }}
+        cost_per_1k_output: {{ .Values.config.models.cheapModel.costPer1kOutput }}
+      strong_model:
+        type: {{ .Values.config.models.strongModel.type }}
+        model_name: {{ .Values.config.models.strongModel.modelName }}
+        api_url: {{ .Values.config.models.strongModel.apiUrl }}
+        cost_per_1k_input: {{ .Values.config.models.strongModel.costPer1kInput }}
+        cost_per_1k_output: {{ .Values.config.models.strongModel.costPer1kOutput }}
+    monthly_budget_limit: {{ .Values.config.monthlyBudgetLimit }}
+    routing_config:
+      cheap_model: {{ .Values.config.routingConfig.cheapModel }}
+      strong_model: {{ .Values.config.routingConfig.strongModel }}
+      token_threshold: {{ .Values.config.routingConfig.tokenThreshold }}
+      confidence_threshold: {{ .Values.config.routingConfig.confidenceThreshold }}

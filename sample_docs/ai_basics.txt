@@ -1,0 +1,5 @@
+Artificial Intelligence (AI) is the simulation of human intelligence processes by machines, especially computer systems. These processes include learning, reasoning, and self-correction. AI has become increasingly important in modern technology and is used in various applications such as natural language processing, computer vision, and robotics.
+
+Machine learning is a subset of AI that focuses on the development of algorithms that can learn from and make predictions or decisions based on data. Deep learning, a further subset of machine learning, uses neural networks with multiple layers to analyze various factors of data.
+
+The history of AI dates back to the 1950s when Alan Turing proposed the Turing Test as a measure of machine intelligence. Since then, AI has evolved significantly, with major breakthroughs in the 21st century driven by increased computational power and the availability of large datasets.

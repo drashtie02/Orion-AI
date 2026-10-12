@@ -1,0 +1,50 @@
+flowchart TD
+    Start([Request Received]) --> AssignID[Assign Request ID]
+    AssignID --> RateCheck{Rate Limit<br/>Check}
+    RateCheck -->|Exceeded| RateError[Return 429<br/>Too Many Requests]
+    RateCheck -->|OK| CacheLookup{Cache<br/>Lookup}
+    
+    CacheLookup -->|Hit| CacheReturn[Return Cached<br/>Response]
+    CacheLookup -->|Miss| QueryAnalysis[Query Analysis]
+    
+    QueryAnalysis --> RetrievalExec[Execute Retrieval]
+    RetrievalExec --> VectorSearch[Vector Search<br/>FAISS]
+    RetrievalExec --> BM25Search[BM25 Search]
+    
+    VectorSearch --> HybridScore[Hybrid Scoring<br/>Alpha Blending]
+    BM25Search --> HybridScore
+    
+    HybridScore --> CircuitCheck{Circuit<br/>Breaker State}
+    CircuitCheck -->|Open| CircuitError[Return 503<br/>Service Unavailable]
+    CircuitCheck -->|Closed/Half-Open| LLMCall[LLM API Call]
+    
+    LLMCall --> RetryCheck{Success?}
+    RetryCheck -->|Failure| RetryDecision{Retry<br/>Attempts < Max?}
+    RetryDecision -->|Yes| Backoff[Exponential<br/>Backoff Delay]
+    Backoff --> LLMCall
+    RetryDecision -->|No| UpdateCircuit[Update Circuit<br/>Breaker State]
+    UpdateCircuit --> ErrorResponse[Return Error<br/>Response]
+    
+    RetryCheck -->|Success| StreamDecision{Streaming<br/>Enabled?}
+    StreamDecision -->|Yes| StreamTokens[Stream Tokens<br/>via SSE]
+    StreamDecision -->|No| BufferResponse[Buffer Full<br/>Response]
+    
+    StreamTokens --> EmitMetrics[Emit Metrics<br/>& Logs]
+    BufferResponse --> EmitMetrics
+    
+    EmitMetrics --> CacheStore[Store in Cache]
+    CacheStore --> ResponseSent([Response Sent])
+    
+    CacheReturn --> ResponseSent
+    RateError --> ResponseSent
+    CircuitError --> ResponseSent
+    ErrorResponse --> ResponseSent
+
+    style Start fill:#e1f5ff
+    style ResponseSent fill:#c8e6c9
+    style RateError fill:#ffcdd2
+    style CircuitError fill:#ffcdd2
+    style ErrorResponse fill:#ffcdd2
+    style StreamTokens fill:#f3e5f5
+    style CacheReturn fill:#fff9c4
+    style HybridScore fill:#e8f5e9

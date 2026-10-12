@@ -1,0 +1,92 @@
+[
+  {
+    "query_id": "q1",
+    "query": "What is artificial intelligence?",
+    "relevant_chunks": ["ai_basics.txt_chunk_0"],
+    "difficulty": "easy"
+  },
+  {
+    "query_id": "q2",
+    "query": "What are the main types of machine learning?",
+    "relevant_chunks": ["ai_basics.txt_chunk_0"],
+    "difficulty": "medium"
+  },
+  {
+    "query_id": "q3",
+    "query": "What is cloud computing?",
+    "relevant_chunks": ["cloud_computing.txt_chunk_0"],
+    "difficulty": "easy"
+  },
+  {
+    "query_id": "q4",
+    "query": "What are the benefits of cloud computing?",
+    "relevant_chunks": ["cloud_computing.txt_chunk_0"],
+    "difficulty": "medium"
+  },
+  {
+    "query_id": "q5",
+    "query": "What is deep learning?",
+    "relevant_chunks": ["ai_basics.txt_chunk_0"],
+    "difficulty": "medium"
+  },
+  {
+    "query_id": "q6",
+    "query": "What are the types of cloud services?",
+    "relevant_chunks": ["cloud_computing.txt_chunk_1"],
+    "difficulty": "medium"
+  },
+  {
+    "query_id": "q7",
+    "query": "Who proposed the Turing Test?",
+    "relevant_chunks": ["ai_basics.txt_chunk_2"],
+    "difficulty": "hard"
+  },
+  {
+    "query_id": "q8",
+    "query": "What are major cloud providers?",
+    "relevant_chunks": ["cloud_computing.txt_chunk_2"],
+    "difficulty": "easy"
+  },
+  {
+    "query_id": "q9",
+    "query": "How does machine learning relate to AI?",
+    "relevant_chunks": ["ai_basics.txt_chunk_0"],
+    "difficulty": "hard"
+  },
+  {
+    "query_id": "q10",
+    "query": "What is Infrastructure as a Service?",
+    "relevant_chunks": ["cloud_computing.txt_chunk_1"],
+    "difficulty": "medium"
+  },
+  {
+    "query_id": "q11",
+    "query": "What is the history of artificial intelligence?",
+    "relevant_chunks": ["ai_basics.txt_chunk_2"],
+    "difficulty": "medium"
+  },
+  {
+    "query_id": "q12",
+    "query": "How does cloud computing help businesses?",
+    "relevant_chunks": ["cloud_computing.txt_chunk_0", "cloud_computing.txt_chunk_2"],
+    "difficulty": "hard"
+  },
+  {
+    "query_id": "q13",
+    "query": "What is neural network?",
+    "relevant_chunks": ["ai_basics.txt_chunk_0"],
+    "difficulty": "medium"
+  },
+  {
+    "query_id": "q14",
+    "query": "What is Platform as a Service?",
+    "relevant_chunks": ["cloud_computing.txt_chunk_1"],
+    "difficulty": "medium"
+  },
+  {
+    "query_id": "q15",
+    "query": "What applications use AI?",
+    "relevant_chunks": ["ai_basics.txt_chunk_0"],
+    "difficulty": "easy"
+  }
+]

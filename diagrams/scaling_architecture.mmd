@@ -1,0 +1,71 @@
+graph TB
+    subgraph "External"
+        Client[Client Applications]
+        MetricsServer[Metrics Server]
+    end
+
+    subgraph "Kubernetes Cluster"
+        subgraph "Ingress Layer"
+            LB[Load Balancer/<br/>Ingress Controller]
+        end
+
+        subgraph "OrionAI Namespace"
+            Service[OrionAI Service<br/>ClusterIP]
+            
+            subgraph "Pod Replicas (Stateless)"
+                Pod1[OrionAI Pod 1<br/>CPU: 500m-2000m<br/>Mem: 1Gi-4Gi]
+                Pod2[OrionAI Pod 2<br/>CPU: 500m-2000m<br/>Mem: 1Gi-4Gi]
+                Pod3[OrionAI Pod 3<br/>CPU: 500m-2000m<br/>Mem: 1Gi-4Gi]
+                PodN[OrionAI Pod N<br/>...<br/>Auto-scaled]
+            end
+
+            HPA[Horizontal Pod<br/>Autoscaler<br/>Min: 3, Max: 10<br/>Target CPU: 70%]
+        end
+
+        subgraph "Shared State"
+            Redis[(Redis Cache<br/>Persistent Volume<br/>5Gi)]
+        end
+
+        subgraph "LLM Service"
+            Ollama[Ollama Service<br/>Local LLM]
+        end
+    end
+
+    Client --> LB
+    LB --> Service
+    Service --> Pod1
+    Service --> Pod2
+    Service --> Pod3
+    Service --> PodN
+
+    Pod1 --> Redis
+    Pod2 --> Redis
+    Pod3 --> Redis
+    PodN --> Redis
+
+    Pod1 --> Ollama
+    Pod2 --> Ollama
+    Pod3 --> Ollama
+    PodN --> Ollama
+
+    MetricsServer -.Monitor CPU/Memory.-> Pod1
+    MetricsServer -.Monitor CPU/Memory.-> Pod2
+    MetricsServer -.Monitor CPU/Memory.-> Pod3
+    MetricsServer -.Monitor CPU/Memory.-> PodN
+
+    HPA -.Scale Decision.-> Pod1
+    HPA -.Scale Decision.-> Pod2
+    HPA -.Scale Decision.-> Pod3
+    HPA -.Scale Decision.-> PodN
+
+    MetricsServer -.Metrics Feed.-> HPA
+
+    style Client fill:#e1f5ff
+    style Pod1 fill:#fff4e1
+    style Pod2 fill:#fff4e1
+    style Pod3 fill:#fff4e1
+    style PodN fill:#fff4e1
+    style Redis fill:#fce4ec
+    style HPA fill:#e8f5e9
+    style Ollama fill:#f3e5f5
+    style MetricsServer fill:#e0f2f1

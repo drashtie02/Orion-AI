@@ -1,0 +1,97 @@
+replicaCount: 1
+
+image:
+  repository: orionai
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 1000
+  capabilities:
+    drop:
+    - ALL
+
+service:
+  type: ClusterIP
+  port: 8011
+  targetPort: 8011
+
+ingress:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+
+autoscaling:
+  enabled: false
+
+podDisruptionBudget:
+  enabled: false
+
+redis:
+  enabled: true
+  image:
+    repository: redis
+    tag: 7-alpine
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  persistence:
+    enabled: false
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 999
+    fsGroup: 999
+
+config:
+  embeddingModel: "nomic-embed-text"
+  embeddingApiUrl: "http://localhost:11434/api/embeddings"
+  embeddingType: "api"
+  llmModel: "llama2"
+  llmApiUrl: "http://localhost:11434/api/generate"
+  llmType: "api"
+  retrievalAlpha: 0.5
+  topKDefault: 5
+  maxContextTokens: 2048
+  device: "cpu"
+  chunkSize: 512
+  chunkOverlap: 0.2
+  indexPath: "artifacts/index"
+  useMixedPrecision: false
+  cpuBatchSize: 4
+  gpuBatchSize: 16
+  criticThreshold: 0.6
+  monthlyBudgetLimit: 10.0
+
+env:
+  logLevel: DEBUG
+  environment: development
+
+secrets:
+  openaiApiKey: ""
+  apiKey: "dev-key"
+
+networkPolicy:
+  enabled: false
+
+resourceQuota:
+  enabled: false

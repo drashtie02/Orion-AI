@@ -1,0 +1,18 @@
+apiVersion: v2
+name: orionai
+description: Production-grade Hybrid RAG system with intelligent model routing
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - rag
+  - ai
+  - llm
+  - retrieval
+  - machine-learning
+maintainers:
+  - name: OrionAI Team
+    email: team@orionai.example.com
+home: https://github.com/yourusername/orionai
+sources:
+  - https://github.com/yourusername/orionai

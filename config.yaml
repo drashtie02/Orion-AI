@@ -1,0 +1,51 @@
+embedding_model: "all-MiniLM-L6-v2"
+embedding_api_url: "http://host.docker.internal:11434/api/embeddings"
+embedding_type: "local"
+llm_model: "llama3.2:1b"
+llm_api_url: "http://host.docker.internal:11434/api/generate"
+llm_type: "api"
+retrieval_alpha: 0.5
+top_k_default: 5
+max_context_tokens: 2048
+device: "auto"
+chunk_size: 512
+chunk_overlap: 0.2
+openai_api_key: ""
+index_path: "artifacts/index"
+use_mixed_precision: true
+cpu_batch_size: 8
+gpu_batch_size: 32
+evaluation_weights:
+  faithfulness: 0.3
+  relevance: 0.2
+  hallucination: 0.3
+  source_coverage: 0.2
+critic_threshold: 0.6
+models:
+  cheap_model:
+    type: api
+    model_name: llama3.2:1b
+    api_url: http://host.docker.internal:11434/api/generate
+    cost_per_1k_input: 0.0001
+    cost_per_1k_output: 0.0001
+  strong_model:
+    type: api
+    model_name: llama3.2:1b
+    api_url: http://host.docker.internal:11434/api/generate
+    cost_per_1k_input: 0.001
+    cost_per_1k_output: 0.001
+monthly_budget_limit: 100.0
+routing_config:
+  cheap_model: cheap_model
+  strong_model: strong_model
+  token_threshold: 500
+  confidence_threshold: 0.6
+resilience:
+  retry:
+    max_retries: 3
+    base_delay: 1.0
+    max_delay: 30.0
+  circuit_breaker:
+    failure_threshold: 5
+    recovery_timeout: 60.0
+    window_size: 10

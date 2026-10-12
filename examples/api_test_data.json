@@ -1,0 +1,269 @@
+{
+  "api_base_url": "http://localhost:8011",
+  "endpoints": {
+    "health": {
+      "method": "GET",
+      "path": "/health",
+      "description": "Check if the API is running",
+      "example": "curl -X GET http://localhost:8011/health"
+    },
+    "query": {
+      "method": "POST",
+      "path": "/api/v1/query",
+      "description": "Query the RAG system with orchestrator",
+      "example": "curl -X POST http://localhost:8011/api/v1/query -H 'Content-Type: application/json' -d '{\"query\": \"Who is Iron Man?\", \"top_k\": 5}'"
+    },
+    "query_streaming": {
+      "method": "POST",
+      "path": "/api/v1/query",
+      "description": "Query with real-time streaming response",
+      "example": "curl -X POST http://localhost:8011/api/v1/query -H 'Content-Type: application/json' -d '{\"query\": \"Who is Iron Man?\", \"stream\": true}'"
+    },
+    "query_direct": {
+      "method": "POST",
+      "path": "/api/v1/query",
+      "description": "Query without orchestrator (direct mode)",
+      "example": "curl -X POST http://localhost:8011/api/v1/query -H 'Content-Type: application/json' -d '{\"query\": \"Who is Iron Man?\", \"use_orchestrator\": false}'"
+    }
+  },
+  "test_cases": [
+    {
+      "id": 1,
+      "name": "Basic Character Query",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "Who is Iron Man?",
+        "top_k": 3
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["Tony Stark", "genius", "armor", "billionaire"]
+    },
+    {
+      "id": 2,
+      "name": "Abilities and Enemies",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "What are Tony Stark abilities and enemies?",
+        "top_k": 5
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["genius-level intellect", "repulsor", "Iron Monger", "Ultron", "Mandarin"]
+    },
+    {
+      "id": 3,
+      "name": "Arc Reactor Technology",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "Tell me about the arc reactor",
+        "top_k": 3
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["arc reactor", "powers", "shrapnel", "heart"]
+    },
+    {
+      "id": 4,
+      "name": "Location Query",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "What is Stark Tower?",
+        "top_k": 3
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["Stark Tower", "Avengers Tower", "New York", "base of operations"]
+    },
+    {
+      "id": 5,
+      "name": "Origin Story",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "How did Tony Stark become Iron Man?",
+        "top_k": 3
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["captured", "terrorists", "escape", "powered suit"]
+    },
+    {
+      "id": 6,
+      "name": "Team Affiliation",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "Is Iron Man part of the Avengers?",
+        "top_k": 3
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["Avengers", "founding member", "Captain America", "Thor"]
+    },
+    {
+      "id": 7,
+      "name": "AI Assistant Query",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "Who is JARVIS?",
+        "top_k": 3
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["JARVIS", "AI assistant", "FRIDAY"]
+    },
+    {
+      "id": 8,
+      "name": "Villain Query",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "Tell me about Ultron",
+        "top_k": 3
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["Ultron", "AI", "accidentally created", "evil"]
+    },
+    {
+      "id": 9,
+      "name": "Company Query",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "What is Stark Industries?",
+        "top_k": 3
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["Stark Industries", "technology", "defense company"]
+    },
+    {
+      "id": 10,
+      "name": "Suit Capabilities",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "What are Iron Man suit capabilities?",
+        "top_k": 3
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["repulsor rays", "flight", "weapons systems", "superhuman strength"]
+    },
+    {
+      "id": 11,
+      "name": "Character Development",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "How did Tony Stark character evolve?",
+        "top_k": 3
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["self-centered", "playboy", "selfless", "sacrifice"]
+    },
+    {
+      "id": 12,
+      "name": "Streaming Query",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "What are repulsor rays?",
+        "top_k": 3,
+        "stream": true
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["repulsor", "energy", "weapon"]
+    },
+    {
+      "id": 13,
+      "name": "Direct Mode (No Orchestrator)",
+      "endpoint": "/api/v1/query",
+      "method": "POST",
+      "payload": {
+        "query": "Who are Iron Man's enemies?",
+        "top_k": 3,
+        "use_orchestrator": false
+      },
+      "expected_sources": ["iron_man.txt"],
+      "expected_keywords": ["Iron Monger", "Whiplash", "Mandarin", "Ultron"]
+    }
+  ],
+  "curl_examples": {
+    "health_check": "curl -X GET http://localhost:8011/health",
+    "basic_query": "curl -X POST http://localhost:8011/api/v1/query -H 'Content-Type: application/json' -d '{\"query\": \"Who is Iron Man?\", \"top_k\": 5}'",
+    "streaming_query": "curl -X POST http://localhost:8011/api/v1/query -H 'Content-Type: application/json' -d '{\"query\": \"Who is Iron Man?\", \"stream\": true}'",
+    "direct_mode": "curl -X POST http://localhost:8011/api/v1/query -H 'Content-Type: application/json' -d '{\"query\": \"Who is Iron Man?\", \"use_orchestrator\": false}'",
+    "with_top_k": "curl -X POST http://localhost:8011/api/v1/query -H 'Content-Type: application/json' -d '{\"query\": \"What are Tony Stark abilities?\", \"top_k\": 10}'",
+    "pretty_json": "curl -X POST http://localhost:8011/api/v1/query -H 'Content-Type: application/json' -d '{\"query\": \"Who is Iron Man?\"}' | jq ."
+  },
+  "python_examples": {
+    "basic_request": "import requests\n\nresponse = requests.post(\n    'http://localhost:8011/api/v1/query',\n    json={'query': 'Who is Iron Man?', 'top_k': 5}\n)\nprint(response.json())",
+    "streaming_request": "import requests\nimport json\n\nresponse = requests.post(\n    'http://localhost:8011/api/v1/query',\n    json={'query': 'Who is Iron Man?', 'stream': True},\n    stream=True\n)\n\nfor line in response.iter_lines():\n    if line:\n        data = json.loads(line.decode('utf-8').replace('data: ', ''))\n        if data['type'] == 'token':\n            print(data['content'], end='', flush=True)"
+  },
+  "response_structure": {
+    "answer": "string - The generated answer to the query",
+    "sources": [
+      {
+        "chunk_id": "string - Unique identifier for the chunk",
+        "source": "string - Source file path",
+        "vector_score": "float - Semantic similarity score",
+        "bm25_score": "float - Keyword matching score",
+        "hybrid_score": "float - Combined score"
+      }
+    ],
+    "metrics": {
+      "latency": {
+        "retrieval_latency": "float - Time for retrieval (seconds)",
+        "embedding_latency": "float - Time for embedding (seconds)",
+        "llm_latency": "float - Time for LLM generation (seconds)",
+        "total_latency": "float - Total processing time (seconds)"
+      },
+      "tokens": {
+        "input_tokens": "int - Number of input tokens",
+        "output_tokens": "int - Number of output tokens",
+        "total_tokens": "int - Total tokens used",
+        "estimated_cost": "float - Estimated cost in USD",
+        "model_used": "string - Model name"
+      }
+    },
+    "evaluation": {
+      "faithfulness": {
+        "faithfulness_score": "float - How well answer is supported by context",
+        "unsupported_sentences": "array - Sentences not supported by context"
+      },
+      "relevance": {
+        "context_relevance_score": "float - How relevant context is to query"
+      },
+      "hallucination": {
+        "hallucination_risk": "float - Risk of hallucinated content",
+        "flags": "array - Specific hallucination warnings"
+      },
+      "source_coverage": {
+        "source_coverage_score": "float - How well sources cover the answer"
+      },
+      "confidence_score": "float - Overall confidence (0-1)"
+    },
+    "trace": [
+      {
+        "step": "string - Step name (retrieval, reasoning, evaluation)",
+        "agent": "string - Agent name",
+        "latency": "float - Step duration",
+        "tokens": "object - Token usage for this step",
+        "summary": "string - Step summary"
+      }
+    ],
+    "routing": {
+      "initial_model": "string - Initially selected model",
+      "final_model": "string - Final model used",
+      "escalated": "boolean - Whether model was escalated",
+      "estimated_cost": "float - Estimated cost"
+    },
+    "request_id": "string - Unique request identifier"
+  },
+  "notes": {
+    "top_k": "Controls how many document chunks to retrieve. Higher values provide more context but increase latency and cost.",
+    "use_orchestrator": "When true, uses full agent pipeline (Planner → Retriever → Reasoner → Critic). When false, uses direct retrieval + generation.",
+    "stream": "When true, returns Server-Sent Events (SSE) for real-time token streaming. Useful for chat interfaces.",
+    "caching": "Responses are cached automatically. Identical queries return cached results instantly.",
+    "evaluation": "All responses include quality metrics: faithfulness, relevance, hallucination detection, and confidence scores.",
+    "hybrid_retrieval": "Combines vector search (semantic) and BM25 (keyword) for optimal retrieval. Alpha=0.5 by default."
+  }
+}

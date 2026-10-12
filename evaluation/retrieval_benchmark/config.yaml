@@ -1,0 +1,33 @@
+# Retrieval Benchmark Configuration
+
+# Random seed for reproducibility
+random_seed: 42
+
+# Dataset
+dataset_path: "evaluation/retrieval_benchmark/dataset.json"
+index_path: "artifacts/index"
+
+# Evaluation settings
+k_values: [1, 3, 5, 10]
+top_k_retrieve: 10
+
+# Strategies to evaluate
+strategies:
+  - bm25
+  - vector
+  - hybrid
+
+# Hybrid configuration
+hybrid_alphas: [0.2, 0.5, 0.8]
+
+# Reranking (if available)
+use_reranking: false
+
+# Output paths
+results_dir: "evaluation/retrieval_benchmark/results"
+plots_dir: "evaluation/retrieval_benchmark/plots"
+tables_dir: "evaluation/retrieval_benchmark/tables"
+
+# Experiment metadata
+experiment_name: "retrieval_comparison"
+description: "Comparison of BM25, Vector, and Hybrid retrieval strategies"

@@ -1,0 +1,39 @@
+experiments:
+  - name: vector_only
+    alpha: 1.0
+    retry_enabled: false
+    
+  - name: bm25_only
+    alpha: 0.0
+    retry_enabled: false
+    
+  - name: hybrid_default
+    alpha: 0.5
+    retry_enabled: true
+    
+  - name: hybrid_vector_heavy
+    alpha: 0.7
+    retry_enabled: true
+    
+  - name: hybrid_bm25_heavy
+    alpha: 0.3
+    retry_enabled: true
+    
+  - name: hybrid_no_retry
+    alpha: 0.5
+    retry_enabled: false
+    
+  - name: cheap_only
+    alpha: 0.5
+    retry_enabled: false
+    routing_mode: cheap_only
+    
+  - name: strong_only
+    alpha: 0.5
+    retry_enabled: false
+    routing_mode: strong_only
+    
+  - name: dynamic_routing
+    alpha: 0.5
+    retry_enabled: true
+    routing_mode: dynamic

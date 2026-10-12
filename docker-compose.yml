@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: orionai-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  orionai-cpu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: orionai:cpu
+    container_name: orionai-cpu
+    ports:
+      - "8011:8011"
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - ./artifacts:/app/artifacts
+      - ./sample_docs:/app/sample_docs:ro
+      - hf_cache:/home/orionai/.cache/huggingface
+    environment:
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - HF_TOKEN=${HF_TOKEN:-}
+      - REDIS_ENABLED=true
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - CACHE_TTL=3600
+      - RATE_LIMIT_ENABLED=true
+      - RATE_LIMIT_REQUESTS=100
+      - RATE_LIMIT_WINDOW_SECONDS=60
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  orionai-gpu:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    image: orionai:gpu
+    container_name: orionai-gpu
+    ports:
+      - "8011:8011"
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - ./artifacts:/app/artifacts
+      - ./sample_docs:/app/sample_docs:ro
+      - hf_cache:/home/orionai/.cache/huggingface
+    environment:
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - HF_TOKEN=${HF_TOKEN:-}
+      - REDIS_ENABLED=true
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - CACHE_TTL=3600
+      - RATE_LIMIT_ENABLED=true
+      - RATE_LIMIT_REQUESTS=100
+      - RATE_LIMIT_WINDOW_SECONDS=60
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import requests; requests.get('http://localhost:8011/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    profiles:
+      - gpu
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  redis_data:
+  hf_cache:

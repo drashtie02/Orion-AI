@@ -1,0 +1,18 @@
+# Example config for Docker-based Ollama models
+
+embedding_model: "nomic-embed-text"
+embedding_api_url: "http://localhost:11434/api/embeddings"
+embedding_type: "api"
+
+llm_model: "llama2"
+llm_api_url: "http://localhost:11434/api/generate"
+llm_type: "api"
+
+retrieval_alpha: 0.5
+top_k_default: 5
+max_context_tokens: 2048
+device: "auto"
+chunk_size: 512
+chunk_overlap: 0.2
+openai_api_key: ""
+index_path: "artifacts/index"

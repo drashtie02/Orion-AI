@@ -1,0 +1,14 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: orionai-pdb
+  namespace: orionai
+  labels:
+    app: orionai
+    component: api
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: orionai
+      component: api

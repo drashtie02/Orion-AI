@@ -1,0 +1,42 @@
+FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04 as builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.10 \
+    python3-pip \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+
+COPY requirements.txt requirements-gpu.txt ./
+RUN pip3 install --no-cache-dir --user torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 && \
+    pip3 install --no-cache-dir --user -r requirements-gpu.txt
+
+FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.10 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/* && \
+    groupadd -r orionai && useradd -r -g orionai orionai
+
+WORKDIR /app
+
+COPY --from=builder /root/.local /home/orionai/.local
+
+COPY --chown=orionai:orionai . .
+
+USER orionai
+
+ENV PATH=/home/orionai/.local/bin:$PATH
+ENV PYTHONUNBUFFERED=1
+ENV ENVIRONMENT=production
+ENV NVIDIA_VISIBLE_DEVICES=all
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
+
+EXPOSE 8011
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD python3 -c "import requests; requests.get('http://localhost:8011/health')" || exit 1
+
+CMD ["python3", "main.py"]
